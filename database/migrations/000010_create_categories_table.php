@@ -13,9 +13,10 @@ return new class extends Migration
             $table->string('name')->comment('Tên danh mục');
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete()->comment('Danh mục cha (nếu có)');
+            $table->unsignedBigInteger('parent_id')->nullable()->comment('Danh mục cha (nếu có)');
             $table->timestamps();
             
+            $table->foreign('parent_id')->references('id')->on('categories')->nullOnDelete();
             $table->index('is_active');
             $table->index('parent_id');
         });

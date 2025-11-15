@@ -89,12 +89,12 @@ class CategoryResource extends Resource
                     ->falseColor('danger')
                     ->alignCenter(),
 
-                Tables\Columns\TextColumn::make('children_count')
-                    ->label('Danh mục con')
-                    ->counts('children')
-                    ->badge()
-                    ->color('warning')
-                    ->alignCenter(),
+                // Tables\Columns\TextColumn::make('children_count')
+                //     ->label('Danh mục con')
+                //     ->counts('children')
+                //     ->badge()
+                //     ->color('warning')
+                //     ->alignCenter(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Ngày tạo')

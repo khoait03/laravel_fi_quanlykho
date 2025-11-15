@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
 
             CustomerTypeSeeder::class,
             SupplierSeeder::class,
+
+            ProductSeeder::class,
+            CustomerSeeder::class,
         ]);
 
         $this->command->newLine();
@@ -35,6 +38,9 @@ class DatabaseSeeder extends Seeder
                 ['Categories', \App\Models\Category::count()],
                 ['CustomerTypeSeeder', \App\Models\CustomerType::count()],
                 ['SupplierSeeder', \App\Models\Supplier::count()],
+                
+                ['ProductSeeder', \App\Models\Product::count()],
+                ['CustomerSeeder', \App\Models\Customer::count()],
             ]
         );
     }

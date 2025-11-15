@@ -2,68 +2,63 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Category extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'description',
         'is_active',
-        'parent_id',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
-    // Tự động tạo slug từ name
-    
+    // protected static function boot()
+    // {
+    //     parent::boot();
+        
+    //     static::creating(function ($category) {
+    //         if (empty($category->slug)) {
+    //             $category->slug = Str::slug($category->name);
+    //         }
+    //     });
 
-    // Quan hệ với danh mục cha
-    public function parent(): BelongsTo
+    //     static::updating(function ($category) {
+    //         if ($category->isDirty('name') && empty($category->slug)) {
+    //             $category->slug = Str::slug($category->name);
+    //         }
+    //     });
+    // }
+
+    /**
+     * Get products in this category
+     */
+    public function products(): HasMany
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->hasMany(Product::class);
     }
 
-    // Quan hệ với danh mục con
-    public function children(): HasMany
+    /**
+     * Get active products count
+     */
+    public function getActiveProductsCountAttribute(): int
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->products()->where('is_active', true)->count();
     }
 
-    // Lấy tất cả danh mục con (đệ quy)
-    public function allChildren(): HasMany
-    {
-        return $this->children()->with('allChildren');
-    }
-
-    // Scope: Chỉ lấy danh mục active
+    /**
+     * Scope active categories
+     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    // Scope: Chỉ lấy danh mục cha (root)
-    public function scopeRoot($query)
-    {
-        return $query->whereNull('parent_id');
-    }
-
-    // Lấy breadcrumb path
-    public function getBreadcrumb(): array
-    {
-        $breadcrumb = [$this->name];
-        $parent = $this->parent;
-
-        while ($parent) {
-            array_unshift($breadcrumb, $parent->name);
-            $parent = $parent->parent;
-        }
-
-        return $breadcrumb;
     }
 }

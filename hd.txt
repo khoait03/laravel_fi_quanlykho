@@ -1,0 +1,9 @@
+php artisan make:filament-resource Customer
+
+php artisan shield:install
+
+php artisan shield:generate --all
+
+php artisan shield:super-admin
+
+#Pages Redirect Path HasPageShield uses the config('filament.path') value by default to perform the shield redirection. If you need to overwrite the rediretion path, just add the next method to your page:

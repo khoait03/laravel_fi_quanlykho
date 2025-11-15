@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->comment('Tên danh mục');
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete()->comment('Danh mục cha (nếu có)');
+            $table->timestamps();
+            
+            $table->index('is_active');
+            $table->index('parent_id');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('categories');
+    }
+};

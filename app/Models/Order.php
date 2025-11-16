@@ -37,30 +37,13 @@ class Order extends Model
         'deposit_amount' => 'integer',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
-        
-    //     static::creating(function ($order) {
-    //         if (empty($order->code)) {
-    //             $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
-    //         }
-    //         if (empty($order->order_date)) {
-    //             $order->order_date = now();
-    //         }
-    //         if (empty($order->created_by)) {
-    //             $order->created_by = auth()->id();
-    //         }
-    //     });
-    // }
-
     protected static function boot()
     {
         parent::boot();
         
         static::creating(function ($order) {
             if (empty($order->code)) {
-                $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
+                $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
             }
             if (empty($order->order_date)) {
                 $order->order_date = now();
@@ -70,7 +53,7 @@ class Order extends Model
             }
         });
 
-        // Thêm phần này: Tự động cập nhật tổng tiền khách hàng
+        // Tự động cập nhật tổng tiền khách hàng
         static::saved(function ($order) {
             if ($order->customer_id) {
                 $order->customer->updateTotals();
@@ -117,54 +100,6 @@ class Order extends Model
     }
 
     /**
-     * Get formatted total amount
-     */
-    public function getFormattedTotalAmountAttribute(): string
-    {
-        return number_format($this->total_amount, 0, ',', '.') . ' ₫';
-    }
-
-    /**
-     * Get formatted discount amount
-     */
-    public function getFormattedDiscountAmountAttribute(): string
-    {
-        return number_format($this->discount_amount, 0, ',', '.') . ' ₫';
-    }
-
-    /**
-     * Get formatted grand total
-     */
-    public function getFormattedGrandTotalAttribute(): string
-    {
-        return number_format($this->grand_total, 0, ',', '.') . ' ₫';
-    }
-
-    /**
-     * Get formatted paid amount
-     */
-    public function getFormattedPaidAmountAttribute(): string
-    {
-        return number_format($this->paid_amount, 0, ',', '.') . ' ₫';
-    }
-
-    /**
-     * Get formatted debt amount
-     */
-    public function getFormattedDebtAmountAttribute(): string
-    {
-        return number_format($this->debt_amount, 0, ',', '.') . ' ₫';
-    }
-
-    /**
-     * Get formatted deposit amount
-     */
-    public function getFormattedDepositAmountAttribute(): string
-    {
-        return number_format($this->deposit_amount, 0, ',', '.') . ' ₫';
-    }
-
-    /**
      * Calculate and update order totals
      */
     public function calculateTotals(): void
@@ -186,6 +121,64 @@ class Order extends Model
         }
         
         $this->save();
+    }
+
+    /**
+     * Reduce product stock when order is completed
+     */
+    public function reduceStock(): void
+    {
+        foreach ($this->items as $item) {
+            $product = $item->product;
+            $product->stock_quantity -= $item->quantity;
+            $product->save();
+        }
+    }
+
+    /**
+     * Restore product stock when order is cancelled
+     */
+    public function restoreStock(): void
+    {
+        foreach ($this->items as $item) {
+            $product = $item->product;
+            $product->stock_quantity += $item->quantity;
+            $product->save();
+        }
+    }
+
+    /**
+     * Check if all products have enough stock
+     */
+    public function hasEnoughStock(): bool
+    {
+        foreach ($this->items as $item) {
+            if ($item->product->stock_quantity < $item->quantity) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get products with insufficient stock
+     */
+    public function getInsufficientStockProducts(): array
+    {
+        $insufficient = [];
+        
+        foreach ($this->items as $item) {
+            if ($item->product->stock_quantity < $item->quantity) {
+                $insufficient[] = [
+                    'product' => $item->product->name,
+                    'required' => $item->quantity,
+                    'available' => $item->product->stock_quantity,
+                    'shortage' => $item->quantity - $item->product->stock_quantity,
+                ];
+            }
+        }
+        
+        return $insufficient;
     }
 
     /**
@@ -234,5 +227,36 @@ class Order extends Model
     public function scopeWithDebt($query)
     {
         return $query->where('debt_amount', '>', 0);
+    }
+
+    // Các accessor giữ nguyên
+    public function getFormattedTotalAmountAttribute(): string
+    {
+        return number_format($this->total_amount, 0, ',', '.') . ' ₫';
+    }
+
+    public function getFormattedDiscountAmountAttribute(): string
+    {
+        return number_format($this->discount_amount, 0, ',', '.') . ' ₫';
+    }
+
+    public function getFormattedGrandTotalAttribute(): string
+    {
+        return number_format($this->grand_total, 0, ',', '.') . ' ₫';
+    }
+
+    public function getFormattedPaidAmountAttribute(): string
+    {
+        return number_format($this->paid_amount, 0, ',', '.') . ' ₫';
+    }
+
+    public function getFormattedDebtAmountAttribute(): string
+    {
+        return number_format($this->debt_amount, 0, ',', '.') . ' ₫';
+    }
+
+    public function getFormattedDepositAmountAttribute(): string
+    {
+        return number_format($this->deposit_amount, 0, ',', '.') . ' ₫';
     }
 }

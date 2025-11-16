@@ -37,6 +37,13 @@ class OrderItem extends Model
         });
 
         static::deleted(function ($item) {
+            // Hoàn trả tồn kho khi xóa item nếu đơn đã hoàn thành
+            if ($item->order->order_status === 'completed') {
+                $product = $item->product;
+                $product->stock_quantity += $item->quantity;
+                $product->save();
+            }
+            
             $item->order->calculateTotals();
         });
     }

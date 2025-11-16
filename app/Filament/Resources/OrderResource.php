@@ -109,20 +109,116 @@ class OrderResource extends Resource
 
                 Section::make('Sản phẩm')
                     ->schema([
+                        // Repeater::make('items')
+                        //     ->relationship()
+                        //     ->schema([
+                        //         Forms\Components\Select::make('product_id')
+                        //             ->label('Sản phẩm')
+                        //             ->options(Product::active()->pluck('name', 'id'))
+                        //             ->searchable()
+                        //             ->required()
+                        //             ->reactive()
+                        //             ->afterStateUpdated(function ($state, Set $set) {
+                        //                 $product = Product::find($state);
+                        //                 if ($product) {
+                        //                     $set('unit_price', $product->retail_price);
+                        //                     $set('quantity', 1);
+                        //                 }
+                        //             })
+                        //             ->columnSpan(4),
+
+                        //         Forms\Components\TextInput::make('quantity')
+                        //             ->label('Số lượng')
+                        //             ->numeric()
+                        //             ->required()
+                        //             ->default(1)
+                        //             ->minValue(1)
+                        //             ->reactive()
+                        //             ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                        //                 $set('total_price', $state * $get('unit_price'));
+                        //             })
+                        //             ->columnSpan(2),
+
+                        //         Forms\Components\TextInput::make('unit_price')
+                        //             ->label('Đơn giá')
+                        //             ->numeric()
+                        //             ->required()
+                        //             ->prefix('₫')
+                        //             ->reactive()
+                        //             ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                        //                 $set('total_price', $state * $get('quantity'));
+                        //             })
+                        //             ->columnSpan(3),
+
+                        //         Forms\Components\TextInput::make('total_price')
+                        //             ->label('Thành tiền')
+                        //             ->numeric()
+                        //             ->disabled()
+                        //             ->dehydrated()
+                        //             ->prefix('₫')
+                        //             ->columnSpan(3),
+                        //     ])
+                        //     ->columns(12)
+                        //     ->defaultItems(1)
+                        //     ->reorderable(false)
+                        //     ->collapsible()
+                        //     ->itemLabel(fn (array $state): ?string => Product::find($state['product_id'])?->name ?? 'Sản phẩm mới')
+                        //     ->addActionLabel('Thêm sản phẩm')
+                        //     ->live()
+                        //     ->afterStateUpdated(function (Get $get, Set $set) {
+                        //         self::updateTotals($get, $set);
+                        //     })
+                        //     ->deleteAction(
+                        //         fn (Forms\Components\Actions\Action $action) => $action->after(fn (Get $get, Set $set) => self::updateTotals($get, $set)),
+                        //     )
+                        //     ->columnSpanFull(),
+
+
                         Repeater::make('items')
+                            ->label('Danh sách sản phẩm')
                             ->relationship()
                             ->schema([
                                 Forms\Components\Select::make('product_id')
                                     ->label('Sản phẩm')
-                                    ->options(Product::active()->pluck('name', 'id'))
+                                    ->options(function () {
+                                        return Product::active()
+                                            ->get()
+                                            ->mapWithKeys(function ($product) {
+                                                $stock = $product->stock_quantity;
+                                                $status = '';
+                                                
+                                                if ($stock <= 0) {
+                                                    $status = ' (Hết hàng)';
+                                                } elseif ($stock <= $product->min_stock_alert) {
+                                                    $status = " (Còn {$stock})";
+                                                }
+                                                
+                                                return [$product->id => $product->name . $status];
+                                            });
+                                    })
                                     ->searchable()
                                     ->required()
                                     ->reactive()
-                                    ->afterStateUpdated(function ($state, Set $set) {
+                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                         $product = Product::find($state);
                                         if ($product) {
                                             $set('unit_price', $product->retail_price);
                                             $set('quantity', 1);
+                                            
+                                            // Hiển thị cảnh báo nếu hết hàng
+                                            if ($product->stock_quantity <= 0) {
+                                                \Filament\Notifications\Notification::make()
+                                                    ->warning()
+                                                    ->title('Cảnh báo tồn kho')
+                                                    ->body("Sản phẩm '{$product->name}' đã hết hàng!")
+                                                    ->send();
+                                            } elseif ($product->stock_quantity <= $product->min_stock_alert) {
+                                                \Filament\Notifications\Notification::make()
+                                                    ->warning()
+                                                    ->title('Cảnh báo tồn kho thấp')
+                                                    ->body("Sản phẩm '{$product->name}' chỉ còn {$product->stock_quantity} sản phẩm trong kho!")
+                                                    ->send();
+                                            }
                                         }
                                     })
                                     ->columnSpan(4),
@@ -136,6 +232,20 @@ class OrderResource extends Resource
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                         $set('total_price', $state * $get('unit_price'));
+                                        
+                                        // Kiểm tra tồn kho
+                                        $productId = $get('product_id');
+                                        if ($productId) {
+                                            $product = Product::find($productId);
+                                            if ($product && $state > $product->stock_quantity) {
+                                                \Filament\Notifications\Notification::make()
+                                                    ->danger()
+                                                    ->title('Vượt quá tồn kho')
+                                                    ->body("Sản phẩm '{$product->name}' chỉ còn {$product->stock_quantity} trong kho!")
+                                                    ->persistent()
+                                                    ->send();
+                                            }
+                                        }
                                     })
                                     ->columnSpan(2),
 
@@ -172,6 +282,7 @@ class OrderResource extends Resource
                                 fn (Forms\Components\Actions\Action $action) => $action->after(fn (Get $get, Set $set) => self::updateTotals($get, $set)),
                             )
                             ->columnSpanFull(),
+                        
                     ]),
 
                 Section::make('Thanh toán')

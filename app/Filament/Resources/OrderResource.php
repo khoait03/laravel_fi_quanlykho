@@ -18,6 +18,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Database\Eloquent\Builder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderResource extends Resource
 {
@@ -498,6 +499,28 @@ class OrderResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
+
+                    // ACTION XUẤT HÓA ĐƠN PDF
+                    Tables\Actions\Action::make('exportInvoice')
+                        ->label('Xuất hóa đơn')
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->color('success')
+                        ->action(function (Order $record) {
+                            return response()->streamDownload(function () use ($record) {
+                                echo Pdf::loadView('invoices.order-invoice', ['order' => $record])
+                                    ->setPaper('a4')
+                                    ->stream();
+                            }, "hoa-don-{$record->code}.pdf");
+                        }),
+                    
+                    // ACTION XEM TRƯỚC HÓA ĐƠN
+                    Tables\Actions\Action::make('previewInvoice')
+                        ->label('Xem hóa đơn')
+                        ->icon('heroicon-o-eye')
+                        ->color('info')
+                        ->url(fn (Order $record): string => route('invoices.preview', $record))
+                        ->openUrlInNewTab(),
+
                     Tables\Actions\DeleteAction::make(),
                 ])
                 

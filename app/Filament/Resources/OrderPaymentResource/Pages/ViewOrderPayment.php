@@ -6,6 +6,8 @@ use App\Filament\Resources\OrderPaymentResource;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components;
+use Filament\Actions;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewOrderPayment extends ViewRecord
 {
@@ -108,7 +110,35 @@ class ViewOrderPayment extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            // Không có actions
+
+            // Action xuất hóa đơn PDF
+            Actions\Action::make('exportInvoice')
+                ->label('Xuất hóa đơn PDF')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->action(function () {
+                    $order = $this->record->order;
+                    return response()->streamDownload(function () use ($order) {
+                        echo Pdf::loadView('invoices.order-invoice', ['order' => $order])
+                            ->setPaper('a4')
+                            ->stream();
+                    }, "hoa-don-{$order->code}.pdf");
+                }),
+            
+            // Action xem trước hóa đơn
+            Actions\Action::make('previewInvoice')
+                ->label('Xem hóa đơn')
+                ->icon('heroicon-o-eye')
+                ->color('info')
+                ->url(fn () => route('invoices.preview', $this->record->order))
+                ->openUrlInNewTab(),
+            
+            Actions\Action::make('view_order')
+                ->label('Xem đơn hàng')
+                ->icon('heroicon-o-eye')
+                ->color('primary')
+                ->url(fn ($record) => route('filament.admin.resources.orders.view', $record->order_id))
+                ->openUrlInNewTab(false),
         ];
     }
 }

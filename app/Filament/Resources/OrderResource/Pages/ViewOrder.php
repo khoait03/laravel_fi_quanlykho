@@ -10,6 +10,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewOrder extends ViewRecord
 {
@@ -18,6 +19,29 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            // Action xuất PDF
+            Actions\Action::make('exportPdf')
+                ->label('Xuất hóa đơn PDF')
+                ->icon('heroicon-o-document-arrow-down')
+                ->color('success')
+                ->action(function () {
+                    return response()->streamDownload(function () {
+                        echo Pdf::loadView('invoices.order-invoice', ['order' => $this->record])
+                            ->setPaper('a4')
+                            ->stream();
+                    }, "hoa-don-{$this->record->code}.pdf");
+                }),
+            
+            // Action xem trước
+            Actions\Action::make('preview')
+                ->label('Xem trước hóa đơn')
+                ->icon('heroicon-o-eye')
+                ->color('info')
+                ->url(fn (): string => route('invoices.preview', $this->record))
+                ->openUrlInNewTab(),
+
+
+            
             Actions\EditAction::make(),
             
             // Action hoàn thành đơn hàng

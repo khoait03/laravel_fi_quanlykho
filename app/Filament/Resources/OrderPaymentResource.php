@@ -24,7 +24,7 @@ class OrderPaymentResource extends Resource
     
     protected static ?string $pluralModelLabel = 'Lịch sử thanh toán của khách hàng';
     
-    protected static ?string $navigationGroup = 'Bán hàng';
+    protected static ?string $navigationGroup = 'Quản lý lịch sử';
     
     protected static ?int $navigationSort = 3;
 

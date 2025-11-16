@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use App\Filament\Components\ImageUploadComponent;
+use App\Filament\Exports\ProductExport;
 
 class ProductResource extends Resource
 {
@@ -316,6 +317,14 @@ class ProductResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+
+                    Tables\Actions\ExportBulkAction::make()
+                        ->label('Xuất Excel đã chọn')
+                        ->icon('heroicon-o-arrow-up-tray')
+                        ->exporter(ProductExport::class)
+                        ->color('info')
+                        ->fileName(fn (): string => 'products-selected-' . date('Y-m-d-His')),
+
                     Tables\Actions\DeleteBulkAction::make()
                         ->label('Xóa đã chọn'),
                 ]),

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
@@ -31,6 +32,14 @@ class Customer extends Model
         'is_walk_in' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get customer orders - THÊM MỚI
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
 
     /**
      * Get customer type

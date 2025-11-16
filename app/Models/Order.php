@@ -37,19 +37,49 @@ class Order extends Model
         'deposit_amount' => 'integer',
     ];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+        
+    //     static::creating(function ($order) {
+    //         if (empty($order->code)) {
+    //             $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
+    //         }
+    //         if (empty($order->order_date)) {
+    //             $order->order_date = now();
+    //         }
+    //         if (empty($order->created_by)) {
+    //             $order->created_by = auth()->id();
+    //         }
+    //     });
+    // }
+
     protected static function boot()
     {
         parent::boot();
         
         static::creating(function ($order) {
             if (empty($order->code)) {
-                $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
+                $order->code = 'ORD-' . date('Ymd') . '-' . str_pad(Order::whereDate('created_at', today())->count() + 1, 5, '0', STR_PAD_LEFT);
             }
             if (empty($order->order_date)) {
                 $order->order_date = now();
             }
             if (empty($order->created_by)) {
                 $order->created_by = auth()->id();
+            }
+        });
+
+        // Thêm phần này: Tự động cập nhật tổng tiền khách hàng
+        static::saved(function ($order) {
+            if ($order->customer_id) {
+                $order->customer->updateTotals();
+            }
+        });
+
+        static::deleted(function ($order) {
+            if ($order->customer_id) {
+                $order->customer->updateTotals();
             }
         });
     }

@@ -115,27 +115,94 @@ class CustomerResource extends Resource
                     ->columns(2)
                     ->collapsible(),
 
-                Forms\Components\Section::make('Thống kê mua hàng')
-                    ->schema([
-                        Forms\Components\TextInput::make('total_purchased')
-                            ->label('Tổng tiền đã mua (VND)')
-                            ->numeric()
-                            ->default(0)
-                            ->suffix('₫')
-                            ->disabled()
-                            ->dehydrated(false)
-                            ->columnSpan(1),
+                // Forms\Components\Section::make('Thống kê mua hàng')
+                //     ->schema([
+                //         Forms\Components\TextInput::make('total_purchased')
+                //             ->label('Tổng tiền đã mua (VND)')
+                //             ->numeric()
+                //             ->default(0)
+                //             ->suffix('₫')
+                //             ->disabled()
+                //             ->dehydrated(false)
+                //             ->columnSpan(1),
 
-                        Forms\Components\TextInput::make('total_debt')
-                            ->label('Tổng công nợ (VND)')
-                            ->numeric()
-                            ->default(0)
-                            ->suffix('₫')
-                            ->helperText('Số tiền khách hàng còn nợ')
-                            ->columnSpan(1),
-                    ])
-                    ->columns(2)
-                    ->collapsible(),
+                //         Forms\Components\TextInput::make('total_debt')
+                //             ->label('Tổng công nợ (VND)')
+                //             ->numeric()
+                //             ->default(0)
+                //             ->suffix('₫')
+                //             ->helperText('Số tiền khách hàng còn nợ')
+                //             ->columnSpan(1),
+                //     ])
+                //     ->columns(2)
+                //     ->collapsible(),
+
+
+                        Forms\Components\Section::make('Thống kê mua hàng')
+                            ->schema([
+                                Forms\Components\Placeholder::make('total_purchased_display')
+                                    ->label('Tổng tiền đã mua')
+                                    ->content(function ($record) {
+                                        if (!$record) return '0 ₫';
+                                        
+                                        // Tính từ orders thời gian thực
+                                        $total = $record->orders()
+                                            ->where('order_status', '!=', 'cancelled')
+                                            ->sum('grand_total');
+                                        
+                                        return number_format($total, 0, ',', '.') . ' ₫';
+                                    })
+                                    ->columnSpan(1),
+
+                                Forms\Components\Placeholder::make('total_debt_display')
+                                    ->label('Tổng công nợ')
+                                    ->content(function ($record) {
+                                        if (!$record) return '0 ₫';
+                                        
+                                        // Tính từ orders thời gian thực
+                                        $debt = $record->orders()
+                                            ->where('order_status', '!=', 'cancelled')
+                                            ->sum('debt_amount');
+                                        
+                                        return number_format($debt, 0, ',', '.') . ' ₫';
+                                    })
+                                    ->columnSpan(1),
+
+                                Forms\Components\Placeholder::make('orders_count_display')
+                                    ->label('Tổng số đơn hàng')
+                                    ->content(function ($record) {
+                                        if (!$record) return '0 đơn';
+                                        
+                                        $count = $record->orders()
+                                            ->where('order_status', '!=', 'cancelled')
+                                            ->count();
+                                        
+                                        return $count . ' đơn';
+                                    })
+                                    ->columnSpan(1),
+
+                                Forms\Components\Placeholder::make('last_order_display')
+                                    ->label('Đơn hàng gần nhất')
+                                    ->content(function ($record) {
+                                        if (!$record) return 'Chưa có';
+                                        
+                                        $lastOrder = $record->orders()
+                                            ->latest('order_date')
+                                            ->first();
+                                        
+                                        if (!$lastOrder) return 'Chưa có';
+                                        
+                                        return $lastOrder->code . ' - ' . $lastOrder->order_date->format('d/m/Y');
+                                    })
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(2)
+                            ->collapsible()
+                            ->visible(fn ($record) => $record !== null), // Chỉ hiện khi edit/view
+
+
+                
+
             ]);
     }
 
@@ -185,19 +252,47 @@ class CustomerResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
+                // Tables\Columns\TextColumn::make('total_purchased')
+                //     ->label('Đã mua')
+                //     ->money('VND')
+                //     ->sortable()
+                //     ->color('success')
+                //     ->toggleable(),
+
+                // Tables\Columns\TextColumn::make('total_debt')
+                //     ->label('Công nợ')
+                //     ->money('VND')
+                //     ->sortable()
+                //     ->color(fn ($state) => $state > 0 ? 'danger' : 'gray')
+                //     ->toggleable(),
+
+
                 Tables\Columns\TextColumn::make('total_purchased')
                     ->label('Đã mua')
-                    ->money('VND')
+                    ->money('VND', locale: 'vi')
                     ->sortable()
                     ->color('success')
+                    ->getStateUsing(function ($record) {
+                        // Tính từ orders thời gian thực
+                        return $record->orders()
+                            ->where('order_status', '!=', 'cancelled')
+                            ->sum('grand_total');
+                    })
                     ->toggleable(),
 
                 Tables\Columns\TextColumn::make('total_debt')
                     ->label('Công nợ')
-                    ->money('VND')
+                    ->money('VND', locale: 'vi')
                     ->sortable()
                     ->color(fn ($state) => $state > 0 ? 'danger' : 'gray')
+                    ->getStateUsing(function ($record) {
+                        // Tính từ orders thời gian thực
+                        return $record->orders()
+                            ->where('order_status', '!=', 'cancelled')
+                            ->sum('debt_amount');
+                    })
                     ->toggleable(),
+
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Trạng thái')

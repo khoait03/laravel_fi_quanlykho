@@ -42,6 +42,25 @@ class Customer extends Model
     }
 
     /**
+     * Calculate and update customer totals from orders
+     */
+    public function updateTotals(): void
+    {
+        // Tính tổng tiền đã mua từ tất cả đơn hàng (trừ đơn đã hủy)
+        $this->total_purchased = $this->orders()
+            ->where('order_status', '!=', 'cancelled')
+            ->sum('grand_total');
+
+        // Tính tổng công nợ từ tất cả đơn hàng (trừ đơn đã hủy)
+        $this->total_debt = $this->orders()
+            ->where('order_status', '!=', 'cancelled')
+            ->sum('debt_amount');
+
+        $this->save();
+    }
+
+
+    /**
      * Get customer type
      */
     public function customerType(): BelongsTo

@@ -39,7 +39,7 @@ class OrderResource extends Resource
             ->schema([
                 Section::make('Thông tin đơn hàng')
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('code')
                                     ->label('Mã đơn hàng')
@@ -55,11 +55,42 @@ class OrderResource extends Resource
                                     ->displayFormat('d/m/Y H:i')
                                     ->format('Y-m-d H:i'),
 
+                                // Forms\Components\Select::make('customer_id')
+                                //     ->label('Khách hàng')
+                                //     ->relationship('customer', 'name')
+                                //     ->searchable()
+                                //     ->preload()
+                                //     ->createOptionForm([
+                                //         Forms\Components\TextInput::make('name')
+                                //             ->label('Tên khách hàng')
+                                //             ->required(),
+                                //         Forms\Components\TextInput::make('phone')
+                                //             ->label('Số điện thoại')
+                                //             ->tel(),
+                                //     ])
+                                //     ->nullable()
+                                //     ->helperText('Để trống nếu khách vãng lai'),
+
+
                                 Forms\Components\Select::make('customer_id')
                                     ->label('Khách hàng')
-                                    ->relationship('customer', 'name')
-                                    ->searchable()
+                                    ->relationship(
+                                        name: 'customer',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn ($query) => $query->orderBy('name')
+                                    )
+                                    ->searchable(['name', 'code', 'phone'])
                                     ->preload()
+                                    ->getOptionLabelFromRecordUsing(function ($record) {
+                                        $label = $record->name;
+                                        if ($record->code) {
+                                            $label = "{$record->code} - {$label}";
+                                        }
+                                        if ($record->phone) {
+                                            $label .= " - {$record->phone}";
+                                        }
+                                        return $label;
+                                    })
                                     ->createOptionForm([
                                         Forms\Components\TextInput::make('name')
                                             ->label('Tên khách hàng')
@@ -70,6 +101,9 @@ class OrderResource extends Resource
                                     ])
                                     ->nullable()
                                     ->helperText('Để trống nếu khách vãng lai'),
+
+
+                                
                             ]),
                     ]),
 

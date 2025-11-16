@@ -15,4 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->withCommands([
+        __DIR__.'/../app/Console/Commands', // Đảm bảo có dòng này
+    ])
+    ->create();

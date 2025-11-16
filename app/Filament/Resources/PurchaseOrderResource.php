@@ -276,27 +276,33 @@ class PurchaseOrderResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('updateStock')
-                    ->label('Cập nhật kho')
-                    ->icon('heroicon-o-arrow-path')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->modalHeading('Cập nhật tồn kho')
-                    ->modalDescription('Bạn có chắc muốn cập nhật tồn kho từ phiếu nhập này?')
-                    ->action(function (PurchaseOrder $record) {
-                        $record->updateProductStock();
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\Action::make('updateStock')
+                        ->label('Cập nhật kho')
+                        ->icon('heroicon-o-arrow-path')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading('Cập nhật tồn kho')
+                        ->modalDescription('Bạn có chắc muốn cập nhật tồn kho từ phiếu nhập này? Sau khi xác nhận số lượng sẽ được cộng trực tiếp vào số lượng tồn kho của sản phẩm')
+                        ->action(function (PurchaseOrder $record) {
+                            $record->updateProductStock();
+                            
+                            \Filament\Notifications\Notification::make()
+                                ->success()
+                                ->title('Cập nhật thành công')
+                                ->body('Tồn kho đã được cập nhật từ phiếu nhập.')
+                                ->send();
+                        }),
+                        // ->visible(fn () => auth()->user()->can('update_stock')),
                         
-                        \Filament\Notifications\Notification::make()
-                            ->success()
-                            ->title('Cập nhật thành công')
-                            ->body('Tồn kho đã được cập nhật từ phiếu nhập.')
-                            ->send();
-                    })
-                    ->visible(fn () => auth()->user()->can('update_stock')),
-                    
-                Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
+                ->icon('heroicon-m-ellipsis-vertical')
+                ->size('sm')
+                ->color('gray')
+                ->button(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

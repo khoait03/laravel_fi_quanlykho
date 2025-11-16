@@ -97,7 +97,7 @@ class DebtResource extends Resource
                 //     }),
 
                 Tables\Columns\TextColumn::make('days_overdue')
-                    ->label('Số ngày quá hạn')
+                    ->label('Hạn')
                     ->getStateUsing(function (Order $record): int {
                         $orderDate = \Carbon\Carbon::parse($record->order_date);
                         $today = \Carbon\Carbon::now();

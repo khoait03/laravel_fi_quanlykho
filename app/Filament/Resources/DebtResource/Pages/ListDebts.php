@@ -61,4 +61,20 @@ class ListDebts extends ListRecords
             DebtResource\Widgets\DebtStatsWidget::class,
         ];
     }
+
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            DebtResource\Widgets\DebtByStatusChart::class,
+            DebtResource\Widgets\TopDebtorsChart::class,
+            DebtResource\Widgets\DebtTrendChart::class,
+            DebtResource\Widgets\PaymentVsDebtChart::class,
+        ];
+    }
+
+    public function getWidgetsColumns(): int | array
+    {
+        return 2;
+    }
 }

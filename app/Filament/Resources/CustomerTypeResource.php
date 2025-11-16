@@ -22,7 +22,7 @@ class CustomerTypeResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Loại khách hàng';
 
-    protected static ?string $navigationGroup = 'Quản lý';
+    protected static ?string $navigationGroup = 'Quản lý khách hàng';
 
     protected static ?int $navigationSort = 2;
 

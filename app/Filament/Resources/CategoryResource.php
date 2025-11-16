@@ -23,7 +23,7 @@ class CategoryResource extends Resource
     
     protected static ?string $pluralModelLabel = 'Danh mục sản phẩm';
 
-    protected static ?string $navigationGroup = 'Kho hàng';
+    protected static ?string $navigationGroup = 'Quản lý sản phẩm';
     
     protected static ?int $navigationSort = 1;
 

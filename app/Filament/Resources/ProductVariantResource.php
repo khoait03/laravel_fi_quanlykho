@@ -21,8 +21,10 @@ class ProductVariantResource extends Resource
     protected static ?string $modelLabel = 'Đơn vị tính';
     
     protected static ?string $pluralModelLabel = 'Đơn vị tính';
+
+    protected static ?string $navigationGroup = 'Quản lý sản phẩm';
     
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

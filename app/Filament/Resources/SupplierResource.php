@@ -23,7 +23,7 @@ class SupplierResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Nhà cung cấp';
 
-    protected static ?string $navigationGroup = 'Quản lý';
+    protected static ?string $navigationGroup = 'Quản lý sản phẩm';
 
     protected static ?int $navigationSort = 1;
 

@@ -25,11 +25,12 @@ class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $navigationLabel = 'Đơn hàng';
+    protected static ?string $navigationLabel = 'Quản lý bán hàng';
 
     protected static ?string $modelLabel = 'Đơn hàng';
 
     protected static ?string $pluralModelLabel = 'Đơn hàng';
+
 
     protected static ?int $navigationSort = 1;
 

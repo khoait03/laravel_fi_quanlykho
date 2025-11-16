@@ -31,7 +31,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Phân quyền',
+    'nav.group' => 'Quản lý tài khoản',
     'nav.role.label' => 'Vai trò',
     'nav.role.icon' => 'heroicon-o-shield-check',
     'resource.label.role' => 'Vai trò',

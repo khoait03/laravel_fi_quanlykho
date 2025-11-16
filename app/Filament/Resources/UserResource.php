@@ -29,13 +29,15 @@ class UserResource extends Resource
 
     protected static ?string $slug = 'users';
 
-    protected static ?string $navigationLabel = 'Thành viên';
+    protected static ?string $navigationLabel = 'Tài khoản';
 
-    protected static ?string $modelLabel = 'Thành viên';
+    protected static ?string $modelLabel = 'Tài khoản';
 
-    protected static ?string $navigationGroup = 'Phân quyền';
+    protected static ?string $navigationGroup = 'Quản lý tài khoản';
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?int $navigationSort = 5;
 
     public static function getNavigationBadge(): ?string
     {

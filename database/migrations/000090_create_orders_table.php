@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 100)->unique()->comment('Mã đơn hàng');
             $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete()->comment('NULL nếu khách vãng lai');
-            $table->date('order_date')->comment('Ngày bán');
+            $table->dateTime('order_date')->comment('Ngày bán');
             $table->integer('total_amount')->default(0)->comment('Tổng tiền (VND)');
             $table->integer('discount_amount')->default(0)->comment('Giảm giá (VND)');
             $table->integer('grand_total')->default(0)->comment('Tổng thanh toán (VND)');

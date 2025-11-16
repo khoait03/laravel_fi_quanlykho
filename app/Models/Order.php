@@ -28,7 +28,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'order_date' => 'date',
+        'order_date' => 'datetime',
         'total_amount' => 'integer',
         'discount_amount' => 'integer',
         'grand_total' => 'integer',

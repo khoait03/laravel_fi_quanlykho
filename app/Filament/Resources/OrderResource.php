@@ -47,13 +47,13 @@ class OrderResource extends Resource
                                     ->dehydrated(false)
                                     ->placeholder('Tự động tạo'),
 
-                                Forms\Components\DatePicker::make('order_date')
+                                Forms\Components\DateTimePicker::make('order_date')
                                     ->label('Ngày bán')
                                     ->required()
                                     ->default(now())
                                     ->native(false)
-                                    ->displayFormat('d/m/Y')
-                                    ->format('Y-m-d'),
+                                    ->displayFormat('d/m/Y H:i')
+                                    ->format('Y-m-d H:i'),
 
                                 Forms\Components\Select::make('customer_id')
                                     ->label('Khách hàng')
@@ -244,7 +244,7 @@ class OrderResource extends Resource
 
                 Tables\Columns\TextColumn::make('order_date')
                     ->label('Ngày bán')
-                    ->date('d/m/Y')
+                    ->date('d/m/Y H:i')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('grand_total')

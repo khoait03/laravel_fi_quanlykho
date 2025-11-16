@@ -39,7 +39,7 @@ class PurchaseOrderResource extends Resource
             ->schema([
                 Section::make('Thông tin phiếu nhập')
                     ->schema([
-                        Forms\Components\Grid::make(3)
+                        Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('code')
                                     ->label('Mã phiếu nhập')
@@ -52,10 +52,24 @@ class PurchaseOrderResource extends Resource
                                     
                                 Forms\Components\Select::make('supplier_id')
                                     ->label('Nhà cung cấp')
-                                    ->relationship('supplier', 'name')
-                                    ->searchable()
+                                    ->relationship(
+                                        name: 'supplier',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn ($query) => $query->orderBy('name')
+                                    )
+                                    ->searchable(['name', 'code', 'phone'])
                                     ->preload()
                                     ->required()
+                                    ->getOptionLabelFromRecordUsing(function ($record) {
+                                        $label = $record->name;
+                                        if ($record->code) {
+                                            $label = "{$record->code} - {$label}";
+                                        }
+                                        if ($record->phone) {
+                                            $label .= " - {$record->phone}";
+                                        }
+                                        return $label;
+                                    })
                                     ->createOptionForm([
                                         Forms\Components\TextInput::make('name')
                                             ->label('Tên NCC')
@@ -67,14 +81,20 @@ class PurchaseOrderResource extends Resource
                                             ->label('Email')
                                             ->email(),
                                     ]),
-                                    
+                                
                                 Forms\Components\DatePicker::make('purchase_date')
                                     ->label('Ngày nhập')
                                     ->default(now())
                                     ->required()
+                                    ->displayFormat('d/m/Y')
+                                    ->format('Y-m-d')
                                     ->native(false),
                             ]),
                     ]),
+
+
+                    
+                    
 
                 Section::make('Sản phẩm')
                     ->schema([

@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Support\Enums\MaxWidth;
 
 class DebtResource extends Resource
 {
@@ -116,10 +117,28 @@ class DebtResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('customer_id')
+                    // ->label('Khách hàng')
+                    // ->relationship('customer', 'name')
+                    // ->searchable()
+                    // ->preload(),
                     ->label('Khách hàng')
-                    ->relationship('customer', 'name')
-                    ->searchable()
-                    ->preload(),
+                                    ->relationship(
+                                        name: 'customer',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn ($query) => $query->orderBy('name')
+                                    )
+                                    ->searchable(['name', 'code', 'phone'])
+                                    ->preload()
+                                    ->getOptionLabelFromRecordUsing(function ($record) {
+                                        $label = $record->name;
+                                        if ($record->code) {
+                                            $label = "{$record->code} - {$label}";
+                                        }
+                                        if ($record->phone) {
+                                            $label .= " - {$record->phone}";
+                                        }
+                                        return $label;
+                                    }),
 
                 Tables\Filters\SelectFilter::make('payment_status')
                     ->label('Trạng thái thanh toán')
@@ -164,7 +183,8 @@ class DebtResource extends Resource
                         }
                         return $indicators;
                     }),
-            ])
+                ], Tables\Enums\FiltersLayout::Modal)
+                ->filtersFormWidth(MaxWidth::ExtraLarge)
             ->actions([
 
                 Tables\Actions\ActionGroup::make([

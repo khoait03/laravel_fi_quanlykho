@@ -254,11 +254,11 @@
     <div class="invoice-container">
         <!-- Header -->
         <div class="header">
-            <div class="company-name">TÊN CÔNG TY CỦA BẠN</div>
+            <div class="company-name">{{ config('invoice.company.name') }}</div>
             <div class="company-info">
-                Địa chỉ: 123 Đường ABC, Quận XYZ, TP. HCM<br>
-                Điện thoại: 0123 456 789 | Email: info@company.com<br>
-                Website: www.company.com
+                Địa chỉ: {{ config('invoice.company.address') }}<br>
+                Điện thoại: {{ config('invoice.company.phone') }} | Email: {{ config('invoice.company.email') }}<br>
+                Website: {{ config('invoice.company.website') }}
             </div>
             <div class="invoice-title">HÓA ĐƠN BÁN HÀNG</div>
         </div>

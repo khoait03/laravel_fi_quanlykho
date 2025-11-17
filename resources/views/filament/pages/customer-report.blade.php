@@ -98,6 +98,102 @@
             </form>
         </x-filament::section>
 
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {{-- Top khách hàng --}}
+            <x-filament::section>
+                <x-slot name="heading">
+                    Top 10 khách hàng mua nhiều nhất
+                </x-slot>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Mã KH</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Tên KH</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">SĐT</th>
+                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Tổng mua</th>
+                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Đơn hàng</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($statistics['top_customers'] ?? [] as $index => $customer)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-2">
+                                            @if($index < 3)
+                                                <span class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
+                                                    {{ $index === 0 ? 'bg-warning-100 text-warning-700 dark:bg-warning-900 dark:text-warning-300' : '' }}
+                                                    {{ $index === 1 ? 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : '' }}
+                                                    {{ $index === 2 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300' : '' }}">
+                                                    {{ $index + 1 }}
+                                                </span>
+                                            @endif
+                                            <span class="text-gray-900 dark:text-white font-medium">{{ $customer['code'] }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-900 dark:text-white">{{ $customer['name'] }}</td>
+                                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ $customer['phone'] }}</td>
+                                    <td class="px-4 py-3 text-right text-success-600 dark:text-success-400 font-medium">
+                                        {{ number_format($customer['total_purchased']) }} ₫
+                                    </td>
+                                    <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400">
+                                        {{ number_format($customer['order_count']) }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                        Không có dữ liệu
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </x-filament::section>
+
+            {{-- Khách hàng có nợ --}}
+            <x-filament::section>
+                <x-slot name="heading">
+                    Top 20 khách hàng có công nợ
+                </x-slot>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-800">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Mã KH</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Tên KH</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">SĐT</th>
+                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Công nợ</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @forelse($statistics['debt_customers'] ?? [] as $customer)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                    <td class="px-4 py-3 text-gray-900 dark:text-white font-medium">{{ $customer['code'] }}</td>
+                                    <td class="px-4 py-3 text-gray-900 dark:text-white">{{ $customer['name'] }}</td>
+                                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ $customer['phone'] }}</td>
+                                    <td class="px-4 py-3 text-right text-danger-600 dark:text-danger-400 font-bold">
+                                        {{ number_format($customer['total_debt']) }} ₫
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                        Không có khách hàng nào có công nợ
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </x-filament::section>
+        </div>
+        
+
         {{-- Khách hàng theo loại --}}
         <div class="fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
             <div class="fi-section-header flex items-center gap-x-3 overflow-hidden px-6 py-4">
@@ -230,99 +326,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {{-- Top khách hàng --}}
-            <x-filament::section>
-                <x-slot name="heading">
-                    Top 10 khách hàng mua nhiều nhất
-                </x-slot>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 dark:bg-gray-800">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Mã KH</th>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Tên KH</th>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">SĐT</th>
-                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Tổng mua</th>
-                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Đơn hàng</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @forelse($statistics['top_customers'] ?? [] as $index => $customer)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                    <td class="px-4 py-3">
-                                        <div class="flex items-center gap-2">
-                                            @if($index < 3)
-                                                <span class="flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
-                                                    {{ $index === 0 ? 'bg-warning-100 text-warning-700 dark:bg-warning-900 dark:text-warning-300' : '' }}
-                                                    {{ $index === 1 ? 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : '' }}
-                                                    {{ $index === 2 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300' : '' }}">
-                                                    {{ $index + 1 }}
-                                                </span>
-                                            @endif
-                                            <span class="text-gray-900 dark:text-white font-medium">{{ $customer['code'] }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-gray-900 dark:text-white">{{ $customer['name'] }}</td>
-                                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ $customer['phone'] }}</td>
-                                    <td class="px-4 py-3 text-right text-success-600 dark:text-success-400 font-medium">
-                                        {{ number_format($customer['total_purchased']) }} ₫
-                                    </td>
-                                    <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400">
-                                        {{ number_format($customer['order_count']) }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                        Không có dữ liệu
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </x-filament::section>
-
-            {{-- Khách hàng có nợ --}}
-            <x-filament::section>
-                <x-slot name="heading">
-                    Top 20 khách hàng có công nợ
-                </x-slot>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 dark:bg-gray-800">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Mã KH</th>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Tên KH</th>
-                                <th class="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">SĐT</th>
-                                <th class="px-4 py-3 text-right font-medium text-gray-700 dark:text-gray-300">Công nợ</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @forelse($statistics['debt_customers'] ?? [] as $customer)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                    <td class="px-4 py-3 text-gray-900 dark:text-white font-medium">{{ $customer['code'] }}</td>
-                                    <td class="px-4 py-3 text-gray-900 dark:text-white">{{ $customer['name'] }}</td>
-                                    <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{{ $customer['phone'] }}</td>
-                                    <td class="px-4 py-3 text-right text-danger-600 dark:text-danger-400 font-bold">
-                                        {{ number_format($customer['total_debt']) }} ₫
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                                        Không có khách hàng nào có công nợ
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </x-filament::section>
-        </div>
+        
 
         {{-- Danh sách khách hàng chi tiết --}}
         <x-filament::section>

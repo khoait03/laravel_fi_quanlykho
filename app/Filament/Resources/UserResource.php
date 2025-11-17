@@ -170,36 +170,36 @@ class UserResource extends Resource
                     // Tables\Actions\DeleteAction::make(),
 
 
-                    Tables\Actions\Action::make('changePassword')
-                        ->label('Đổi mật khẩu')
-                        ->icon('heroicon-o-key')
-                        ->modalSubmitActionLabel('Xác nhận')
-                        ->form([
-                            TextInput::make('new_password')
-                                ->label('Mật khẩu mới')
-                                ->password()
-                                ->required()
-                                ->minLength(8)
-                                ->same('confirm_password')
-                                ->validationAttribute('mật khẩu mới'),
+                    // Tables\Actions\Action::make('changePassword')
+                    //     ->label('Đổi mật khẩu')
+                    //     ->icon('heroicon-o-key')
+                    //     ->modalSubmitActionLabel('Xác nhận')
+                    //     ->form([
+                    //         TextInput::make('new_password')
+                    //             ->label('Mật khẩu mới')
+                    //             ->password()
+                    //             ->required()
+                    //             ->minLength(8)
+                    //             ->same('confirm_password')
+                    //             ->validationAttribute('mật khẩu mới'),
                             
-                            TextInput::make('confirm_password')
-                                ->label('Xác nhận mật khẩu')
-                                ->password()
-                                ->required()
-                                ->dehydrated(false)
-                                ->validationAttribute('xác nhận mật khẩu'),
-                        ])
-                        ->action(function (User $record, array $data) {
-                            $record->update([
-                                'password' => bcrypt($data['new_password'])
-                            ]);
+                    //         TextInput::make('confirm_password')
+                    //             ->label('Xác nhận mật khẩu')
+                    //             ->password()
+                    //             ->required()
+                    //             ->dehydrated(false)
+                    //             ->validationAttribute('xác nhận mật khẩu'),
+                    //     ])
+                    //     ->action(function (User $record, array $data) {
+                    //         $record->update([
+                    //             'password' => bcrypt($data['new_password'])
+                    //         ]);
                             
-                            \Filament\Notifications\Notification::make()
-                                ->success()
-                                ->title('Đổi mật khẩu thành công')
-                                ->send();
-                        }),
+                    //         \Filament\Notifications\Notification::make()
+                    //             ->success()
+                    //             ->title('Đổi mật khẩu thành công')
+                    //             ->send();
+                    //     }),
 
                 ])
             ])

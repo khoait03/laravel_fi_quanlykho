@@ -16,7 +16,8 @@ class ListOrders extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tạo đơn hàng'),
+                ->label('Tạo đơn hàng')
+                ->icon('heroicon-o-plus'),
         ];
     }
 

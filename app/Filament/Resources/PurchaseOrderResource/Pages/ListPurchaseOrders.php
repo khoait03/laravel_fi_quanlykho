@@ -17,7 +17,8 @@ class ListPurchaseOrders extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tạo phiếu nhập'),
+                ->label('Tạo phiếu nhập')
+                ->icon('heroicon-o-plus'),
         ];
     }
     

@@ -17,9 +17,9 @@ class Login extends BaseLogin
                 $this->makeForm()
                     ->schema([
                         // Nút đăng nhập Google
-                        // Placeholder::make('google_login')
-                        //     ->label('')
-                        //     ->content(new HtmlString($this->getGoogleLoginButton())),
+                        Placeholder::make('google_login')
+                            ->label('')
+                            ->content(new HtmlString($this->getGoogleLoginButton())),
                         
                         // Placeholder::make('divider')
                         //     ->label('')

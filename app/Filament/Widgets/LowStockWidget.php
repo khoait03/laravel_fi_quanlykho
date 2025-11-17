@@ -9,6 +9,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LowStockWidget extends BaseWidget
 {
+    protected static ?string $heading = 'Thống kê tồn kho';
+    
     protected static ?int $sort = 4;
 
     protected int | string | array $columnSpan = 'full';

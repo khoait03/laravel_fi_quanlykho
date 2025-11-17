@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    protected ?string $heading = 'Tổng quan';
     protected function getStats(): array
     {
         // Tính toán doanh thu tháng này

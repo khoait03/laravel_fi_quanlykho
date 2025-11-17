@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class RevenueChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Doanh thu';
+    protected static ?string $heading = 'Thống kê doanh thu';
     
     protected static ?int $sort = 2;
 

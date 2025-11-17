@@ -9,6 +9,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class TopCustomersWidget extends BaseWidget
 {
+    protected static ?string $heading = 'Top khách hàng';
+    
     protected static ?int $sort = 3;
 
     protected int | string | array $columnSpan = 'full';

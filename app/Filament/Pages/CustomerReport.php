@@ -11,10 +11,12 @@ use Filament\Forms\Form;
 use App\Models\Customer;
 use App\Models\CustomerType;
 use App\Models\Order;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class CustomerReport extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Báo cáo khách hàng';

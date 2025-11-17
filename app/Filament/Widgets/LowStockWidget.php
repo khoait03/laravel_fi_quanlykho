@@ -6,9 +6,12 @@ use App\Models\Product;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class LowStockWidget extends BaseWidget
 {
+    use HasWidgetShield;
+    
     protected static ?string $heading = 'Thống kê tồn kho';
     
     protected static ?int $sort = 4;

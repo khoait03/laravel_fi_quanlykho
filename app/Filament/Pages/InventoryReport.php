@@ -10,10 +10,12 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use App\Models\Product;
 use App\Models\Category;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 
 class InventoryReport extends Page implements HasForms
 {
     use InteractsWithForms;
+    use HasPageShield;
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $navigationLabel = 'Báo cáo tồn kho';

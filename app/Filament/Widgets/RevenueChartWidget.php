@@ -5,9 +5,13 @@ namespace App\Filament\Widgets;
 use App\Models\Order;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\DB;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class RevenueChartWidget extends ChartWidget
 {
+    use HasWidgetShield;
+
+    
     protected static ?string $heading = 'Thống kê doanh thu';
     
     protected static ?int $sort = 2;

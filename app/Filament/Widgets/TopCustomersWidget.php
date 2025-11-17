@@ -6,9 +6,12 @@ use App\Models\Customer;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class TopCustomersWidget extends BaseWidget
 {
+    use HasWidgetShield;
+    
     protected static ?string $heading = 'Top khách hàng';
     
     protected static ?int $sort = 3;

@@ -9,9 +9,12 @@ use App\Models\PurchaseOrder;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\DB;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 
 class StatsOverviewWidget extends BaseWidget
 {
+    use HasWidgetShield;
+     
     protected ?string $heading = 'Tổng quan';
     protected function getStats(): array
     {

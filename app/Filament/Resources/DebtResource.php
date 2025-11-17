@@ -16,10 +16,21 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Support\Enums\MaxWidth;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class DebtResource extends Resource
+class DebtResource extends Resource implements HasShieldPermissions
 {
-    protected static ?string $model = null;
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            
+        ];
+    }
+    
+    protected static ?string $model = Order::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 

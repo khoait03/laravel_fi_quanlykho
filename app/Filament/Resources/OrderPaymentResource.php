@@ -11,16 +11,27 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Support\Enums\MaxWidth;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class OrderPaymentResource extends Resource
+class OrderPaymentResource extends Resource implements HasShieldPermissions
 {
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            
+        ];
+    }
+    
     protected static ?string $model = OrderPayment::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     
     protected static ?string $navigationLabel = 'Lịch sử thanh toán';
     
-    protected static ?string $modelLabel = 'Thanh toán đơn hàng';
+    protected static ?string $modelLabel = 'Lịch sử thanh toán';
     
     protected static ?string $pluralModelLabel = 'Lịch sử thanh toán của khách hàng';
     

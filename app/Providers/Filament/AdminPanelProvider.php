@@ -21,6 +21,7 @@ use App\Filament\Widgets\StatsOverviewWidget;
 use App\Filament\Widgets\RevenueChartWidget;
 use App\Filament\Widgets\TopCustomersWidget;
 use App\Filament\Widgets\LowStockWidget;
+use App\Filament\Pages\Auth\Login;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -32,7 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            // ->login()
+            ->login(Login::class) 
             ->colors([
                 'primary' => Color::Sky,
             ])

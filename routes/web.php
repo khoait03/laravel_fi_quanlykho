@@ -4,6 +4,20 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
+use App\Http\Controllers\Auth\GoogleAuthController;
+
+
+Route::get('/huong-dan', function () {
+    return view('user-guide');
+})->name('user.guide');
+
+Route::get('auth/google', [GoogleAuthController::class, 'redirectToGoogle'])
+    ->name('auth.google');
+    
+Route::get('auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])
+    ->name('auth.google.callback');
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });

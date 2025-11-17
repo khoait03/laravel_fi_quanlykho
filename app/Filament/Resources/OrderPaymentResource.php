@@ -11,19 +11,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Support\Enums\MaxWidth;
-use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
-class OrderPaymentResource extends Resource implements HasShieldPermissions
+class OrderPaymentResource extends Resource 
 {
 
-    public static function getPermissionPrefixes(): array
-    {
-        return [
-            'view',
-            'view_any',
-            
-        ];
-    }
     
     protected static ?string $model = OrderPayment::class;
 

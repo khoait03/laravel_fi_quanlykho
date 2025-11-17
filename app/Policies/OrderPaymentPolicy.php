@@ -41,7 +41,7 @@ class OrderPaymentPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('{{ Create }}');
+        return $user->can('create_order::payment');
     }
 
     /**
@@ -53,7 +53,7 @@ class OrderPaymentPolicy
      */
     public function update(User $user, OrderPayment $orderPayment): bool
     {
-        return $user->can('{{ Update }}');
+        return $user->can('update_order::payment');
     }
 
     /**
@@ -65,7 +65,7 @@ class OrderPaymentPolicy
      */
     public function delete(User $user, OrderPayment $orderPayment): bool
     {
-        return $user->can('{{ Delete }}');
+        return $user->can('delete_order::payment');
     }
 
     /**
@@ -76,7 +76,7 @@ class OrderPaymentPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('{{ DeleteAny }}');
+        return $user->can('delete_any_order::payment');
     }
 
     /**

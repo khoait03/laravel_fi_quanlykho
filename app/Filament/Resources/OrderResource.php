@@ -195,7 +195,7 @@ class OrderResource extends Resource
                                                     $status = " (Còn {$stock})";
                                                 }
                                                 
-                                                return [$product->id => $product->name . $status];
+                                                return [$product->id => $product->code . ' - ' . $product->name . $status];
                                             });
                                     })
                                     ->searchable()

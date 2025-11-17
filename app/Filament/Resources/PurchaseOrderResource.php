@@ -104,7 +104,14 @@ class PurchaseOrderResource extends Resource
                             ->schema([
                                 Forms\Components\Select::make('product_id')
                                     ->label('Sản phẩm')
-                                    ->options(Product::query()->pluck('name', 'id'))
+                                    // ->options(Product::query()->pluck('name', 'id'))
+                                    ->options(function () {
+                                        return Product::query()
+                                            ->get()
+                                            ->mapWithKeys(function ($product) {
+                                                return [$product->id => $product->code . ' - ' . $product->name];
+                                            });
+                                    })
                                     ->searchable()
                                     ->preload()
                                     ->required()

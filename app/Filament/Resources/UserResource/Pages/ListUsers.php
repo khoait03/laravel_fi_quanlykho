@@ -14,7 +14,8 @@ class ListUsers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-            ->icon('heroicon-o-plus'),
+                ->label('Tạo mới tài khoản')
+                ->icon('heroicon-o-plus'),
         ];
     }
 }

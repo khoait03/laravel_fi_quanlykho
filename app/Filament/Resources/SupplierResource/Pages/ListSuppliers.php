@@ -14,7 +14,7 @@ class ListSuppliers extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->label('Tạo nhà cung cấp')
+                ->label('Tạo mới nhà cung cấp')
                 ->icon('heroicon-o-plus'),
         ];
     }

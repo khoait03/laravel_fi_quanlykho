@@ -18,10 +18,10 @@ class CustomerType extends Model
     /**
      * Get customers of this type
      */
-    // public function customers(): HasMany
-    // {
-    //     return $this->hasMany(Customer::class, 'customer_type_id');
-    // }
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'customer_type_id');
+    }
 
     /**
      * Get count of customers

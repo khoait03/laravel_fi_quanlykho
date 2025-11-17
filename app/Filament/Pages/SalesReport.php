@@ -18,11 +18,11 @@ class SalesReport extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
     
-    protected static ?string $navigationLabel = 'Báo Cáo Bán Hàng';
+    protected static ?string $navigationLabel = 'Báo cáo bán hàng';
     
-    protected static ?string $title = 'Báo Cáo Bán Hàng';
+    protected static ?string $title = 'Báo cáo bán hàng';
     
-    protected static ?string $navigationGroup = 'Báo cáo';
+    protected static ?string $navigationGroup = 'Báo cáo & Thống kê';
 
     protected static string $view = 'filament.pages.sales-report';
 
@@ -48,13 +48,17 @@ class SalesReport extends Page implements HasForms
                 DatePicker::make('date_from')
                     ->label('Từ ngày')
                     ->required()
-                    ->date('d/m/Y')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
+                    ->format('Y-m-d')
                     ->default(now()->startOfMonth()),
-                    
+                                
                 DatePicker::make('date_to')
                     ->label('Đến ngày')
                     ->required()
-                    ->date('d/m/Y')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
+                    ->format('Y-m-d')
                     ->default(now()),
                     
                 Select::make('report_type')

@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\OrderPayment;
+use App\Models\OrderDebt;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrderPaymentPolicy
+class OrderDebtPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +18,19 @@ class OrderPaymentPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_order::payment');
+        return $user->can('view_any_debt');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function view(User $user, OrderPayment $orderPayment): bool
+    public function view(User $user, OrderDebt $orderDebt): bool
     {
-        return $user->can('view_order::payment');
+        return $user->can('view_debt');
     }
 
     /**
@@ -48,10 +48,10 @@ class OrderPaymentPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function update(User $user, OrderPayment $orderPayment): bool
+    public function update(User $user, OrderDebt $orderDebt): bool
     {
         return $user->can('{{ Update }}');
     }
@@ -60,10 +60,10 @@ class OrderPaymentPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function delete(User $user, OrderPayment $orderPayment): bool
+    public function delete(User $user, OrderDebt $orderDebt): bool
     {
         return $user->can('{{ Delete }}');
     }
@@ -83,10 +83,10 @@ class OrderPaymentPolicy
      * Determine whether the user can permanently delete.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function forceDelete(User $user, OrderPayment $orderPayment): bool
+    public function forceDelete(User $user, OrderDebt $orderDebt): bool
     {
         return $user->can('{{ ForceDelete }}');
     }
@@ -106,10 +106,10 @@ class OrderPaymentPolicy
      * Determine whether the user can restore.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function restore(User $user, OrderPayment $orderPayment): bool
+    public function restore(User $user, OrderDebt $orderDebt): bool
     {
         return $user->can('{{ Restore }}');
     }
@@ -129,10 +129,10 @@ class OrderPaymentPolicy
      * Determine whether the user can replicate.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\OrderPayment  $orderPayment
+     * @param  \App\Models\OrderDebt  $orderDebt
      * @return bool
      */
-    public function replicate(User $user, OrderPayment $orderPayment): bool
+    public function replicate(User $user, OrderDebt $orderDebt): bool
     {
         return $user->can('{{ Replicate }}');
     }

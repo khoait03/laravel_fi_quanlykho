@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DebtResource\Pages;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\OrderDebt;
 use App\Models\Supplier;
 use App\Models\PurchaseOrder;
 use Filament\Forms;
@@ -30,7 +31,8 @@ class DebtResource extends Resource implements HasShieldPermissions
         ];
     }
     
-    protected static ?string $model = Order::class;
+    // Model rỗng dùng để phân quyền trong filament-shield
+    protected static ?string $model = OrderDebt::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 

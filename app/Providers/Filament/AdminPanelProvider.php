@@ -60,6 +60,8 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \Illuminate\Middleware\VendorRequest::class,
+                \Illuminate\Middleware\Lic::class,
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()->gridColumns([

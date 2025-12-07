@@ -17,9 +17,9 @@ class Login extends BaseLogin
                 $this->makeForm()
                     ->schema([
                         // Nút đăng nhập Google
-                        Placeholder::make('google_login')
-                            ->label('')
-                            ->content(new HtmlString($this->getGoogleLoginButton())),
+                        // Placeholder::make('google_login')
+                        //     ->label('')
+                        //     ->content(new HtmlString($this->getGoogleLoginButton())),
                         
                         // Placeholder::make('divider')
                         //     ->label('')
@@ -35,15 +35,15 @@ class Login extends BaseLogin
                         // }
                         
                         // Thêm phần hiển thị tài khoản demo
-                        Placeholder::make('demo_accounts')
-                            ->label('Tài khoản đã tắt quyền xóa - để tránh spam')
-                            ->hidden(!env('DEMO_USER'))
-                            ->content(new HtmlString($this->getDemoAccountsHtml())),
+                        // Placeholder::make('demo_accounts')
+                        //     ->label('Tài khoản đã tắt quyền xóa - để tránh spam')
+                        //     ->hidden(!env('DEMO_USER'))
+                        //     ->content(new HtmlString($this->getDemoAccountsHtml())),
 
-                        Placeholder::make('user_guide')
-                            ->label('')
-                            // ->hidden(!env('DEMO_USER'))
-                            ->content(new HtmlString('<div class="mt-3 text-center"><a href="/huong-dan" target="_blank" rel="noopener noreferrer" class="text-sm text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-medium inline-flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Xem hướng dẫn sử dụng<svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></div>')),
+                        // Placeholder::make('user_guide')
+                        //     ->label('')
+                        //     // ->hidden(!env('DEMO_USER'))
+                        //     ->content(new HtmlString('<div class="mt-3 text-center"><a href="/huong-dan" target="_blank" rel="noopener noreferrer" class="text-sm text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-medium inline-flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>Xem hướng dẫn sử dụng<svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></div>')),
                     ])
                     ->statePath('data'),
             ),
